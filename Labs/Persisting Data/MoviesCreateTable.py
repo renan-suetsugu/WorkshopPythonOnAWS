@@ -1,28 +1,29 @@
 import boto3
 
-dynamodb = boto3.resource('dynamodb', region_name='us-west-2')
+dynamodb = boto3.resource('dynamodb', region_name='us-east-1')
 
 table = dynamodb.create_table(
     TableName = 'Movies',
     KeySchema = [
         {
-            'AttibuteName': 'year',
+            'AttributeName': 'year',
             'KeyType': 'HASH' #Chave de partição
         },
         {
-            'AttibuteName': 'title',
+            'AttributeName': 'title',
             'KeyType': 'RANGE'  # Chave de classificação
         }
     ],
     AttributeDefinitions = [
         {
             'AttributeName':'year',
-            'AttibuteType':'N'
+            'AttributeType':'N'
         },
         {
             'AttributeName':'title',
-            'AttibuteType':'S'
+            'AttributeType':'S'
         },
+
     ],
     ProvisionedThroughput={
         'ReadCapacityUnits': 10,
