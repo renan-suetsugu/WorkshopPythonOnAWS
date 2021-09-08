@@ -1,4 +1,5 @@
 import boto3
+from botocore.exceptions import ClientError
 import json
 import decimal
 
@@ -19,19 +20,20 @@ table = dynamodb.Table('Movies')
 title = "The Big New Movie"
 year = 2015
 
-response = table.update_item(
-    Key={
-        'year': year,
-        'title': title
-    },
-    UpdateExpression="set info.rating=:r, info.plot=:p, info.actors=:a",
-    ExpressionAttributeValues={
-        ':r': decimal.Decimal(5.5),
-        ':p': "Everything happens all at once.",
-        ':a': ["Larry", "Moe", "Curly"]
-    },
-    ReturnValues="UPDATED_NEW"
-)
+print("Tentando uma exclução condicional...")
 
-print("Item atualizado com sucesso:")
-print(json.dumps(response, indent=4, cls=DecimalEncoder))
+try:
+    response = table.delete_item(
+        Key={
+            'year': year,
+            'title': title
+        },
+    )
+except ClientError as e:
+    if e.response['Error']['Code'] == "ConditionalCheckFailedException":
+        print(e.response['Error']['Message'])
+    else:
+        raise
+else:
+    print("Item deletado com sucesso:")
+    print(json.dumps(response, indent=4, cls=DecimalEncoder))

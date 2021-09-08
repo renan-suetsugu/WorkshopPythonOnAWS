@@ -30,7 +30,7 @@ try:
             'title': title
         },
         UpdateExpression="remove info.actors[0]",
-        ConditionExpression="size(info.actors) > :num",
+        ConditionExpression="size(info.actors) >= :num",
         ExpressionAttributeValues={
             ':num': 3
         },
@@ -42,5 +42,5 @@ except ClientError as e:
     else:
         raise
 else:
-    print("UpdateItem succeeded:")
+    print("Item atualizado com sucesso:")
     print(json.dumps(response, indent=4, cls=DecimalEncoder))

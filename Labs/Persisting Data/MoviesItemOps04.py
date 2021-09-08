@@ -31,5 +31,5 @@ response = table.update_item(
     ReturnValues="UPDATED_NEW"
 )
 
-print("UpdateItem succeeded:")
+print("Item atualizado com sucesso:")
 print(json.dumps(response, indent=4, cls=DecimalEncoder))
